@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
           verticalDirection: VerticalDirection.down,
           children: [
             Container(
-              padding: const EdgeInsets.all(40),
+              padding: const EdgeInsets.all(30),
               child: FutureBuilder<WeatherResponse>(
                 future: currentWeather,
                 builder: ((context, snapshot) {
@@ -195,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   "${(snapshot.data!.main.temp).round()}°",
                                   style: TextStyle(
-                                    fontSize: 100,
+                                    fontSize: 90,
                                     fontWeight: FontWeight.w900,
                                     color: getTextColor(),
                                   ),
@@ -221,6 +221,11 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           child: FutureBuilder<QuoteResponse>(
                             future: randomQuote,
@@ -229,13 +234,22 @@ class _HomePageState extends State<HomePage> {
                                 final Quote? quote = snapshot.data?.quote;
                                 return Column(
                                   children: [
-                                    Text(
-                                      "${quote?.quote}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                    Container(
+                                      constraints:
+                                          const BoxConstraints(maxHeight: 70),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Text(
+                                          "${quote?.quote}",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
                                       ),
                                     ),
+                                    const SizedBox(height: 5),
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: Text(
@@ -244,6 +258,7 @@ class _HomePageState extends State<HomePage> {
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 14,
+                                          color: Colors.black87,
                                         ),
                                       ),
                                     ),
@@ -252,13 +267,27 @@ class _HomePageState extends State<HomePage> {
                               } else if (snapshot.hasError) {
                                 return Text("${snapshot.error}");
                               }
-                              return const Text("Loading...");
+                              return Row(
+                                children: [
+                                  const Text(
+                                    "Getting your quote for today...",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const Spacer(flex: 1),
+                                  CircularProgressIndicator(
+                                    color: Colors.purple.shade700,
+                                  ),
+                                ],
+                              );
                             }),
                           ),
                         ),
                         Container(
-                          height: 80,
-                          margin: const EdgeInsets.only(top: 80),
+                          height: 75,
+                          margin: const EdgeInsets.only(top: 70),
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.6),
                             borderRadius: BorderRadius.circular(10.0),
@@ -353,10 +382,10 @@ class _HomePageState extends State<HomePage> {
             ClipPath(
               clipper: WaveClipperTwo(flip: true, reverse: true),
               child: Container(
-                height: 350,
+                height: 250,
                 width: double.infinity,
                 color: Colors.white,
-                padding: const EdgeInsets.fromLTRB(40, 80, 40, 0),
+                padding: const EdgeInsets.fromLTRB(30, 70, 30, 0),
                 child: FutureBuilder<ThreeHourWeatherResponse>(
                   future: threeHourWeather,
                   builder: (context, snapshot) {
