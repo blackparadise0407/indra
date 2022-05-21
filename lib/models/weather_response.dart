@@ -1,64 +1,47 @@
+import 'package:indra/models/coordinate.dart';
+import 'package:indra/models/main.dart';
+import 'package:indra/models/sys.dart';
+import 'package:indra/models/weather.dart';
+import 'package:indra/models/wind.dart';
+
 class WeatherResponse {
   final int? id;
-  final String? main;
-  final String? description;
-  final String? icon;
-  final int? lon;
-  final int? lat;
-  final double? temp;
-  final double? feelsLike;
-  final double? tempMin;
-  final double? tempMax;
-  final int? pressure;
-  final int? humidity;
-  final int? seaLevel;
-  final int? grndLevel;
-  final String? country;
-  final double? sunrise;
-  final double? sunset;
+  final Coordinate? coord;
   final String? name;
+  final List<Weather> weather;
+  final Wind wind;
+  final Sys sys;
+  final Main main;
+  final int? dt;
+  final int? visibility;
 
   const WeatherResponse({
     required this.id,
-    required this.country,
-    required this.description,
-    required this.feelsLike,
-    required this.grndLevel,
-    required this.humidity,
-    required this.icon,
-    required this.lat,
-    required this.lon,
-    required this.main,
     required this.name,
-    required this.seaLevel,
-    required this.pressure,
-    required this.sunrise,
-    required this.sunset,
-    required this.temp,
-    required this.tempMax,
-    required this.tempMin,
+    required this.weather,
+    required this.wind,
+    required this.coord,
+    required this.sys,
+    required this.main,
+    required this.dt,
+    required this.visibility,
   });
 
   factory WeatherResponse.fromJson(Map<String, dynamic> json) {
+    var weather = json['weather'] as List;
+
+    List<Weather> weathers = weather.map((w) => Weather.fromJson(w)).toList();
+
     return WeatherResponse(
-      id: json['weather'][0]['id'],
-      country: json['sys']['country'],
-      description: json['weather'][0]['description'],
-      feelsLike: json['main']['feels_like'],
-      grndLevel: json['main']['grnd_level'],
-      humidity: json['main']['humidity'],
-      icon: json['weather'][0]['icon'],
-      lat: json['coord']['lat'],
-      lon: json['coord']['lon'],
-      main: json['weather'][0]['main'],
+      id: json['id'],
+      dt: json['dt'],
+      coord: Coordinate.fromJson(json['coord']),
       name: json['name'],
-      seaLevel: json['main']['sea_level'],
-      pressure: json['main']['pressure'],
-      sunrise: json['sys']['sunrise'],
-      sunset: json['sys']['sunset'],
-      temp: json['main']['temp'],
-      tempMax: json['main']['temp_max'],
-      tempMin: json['main']['temp_min'],
+      weather: weathers,
+      wind: Wind.fromJson(json['wind']),
+      sys: Sys.fromJson(json['sys']),
+      main: Main.fromJson(json['main']),
+      visibility: json['visibility'],
     );
   }
 }
